@@ -8,12 +8,79 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="112dp"
+        android:text="Find Tickets Around You"
+        android:textColor="@color/black"
+        android:textSize="17dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextKeyword"
+        android:layout_width="381dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="Event Type or keyword to search"
+        android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextCity"
+        android:layout_width="294dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="City"
+        android:inputType="text"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextKeyword" />
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="94dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="292dp"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#ED2F2F"
+        android:text="Search"
+        app:layout_constraintStart_toStartOf="@+id/editTextCity"
+        app:layout_constraintTop_toTopOf="@+id/editTextKeyword" />
+
+
+    <!-- Rows for Ticket -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="409dp"
+        android:layout_height="610dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCity"
+        tools:listitem="@layout/ticket_row" />
+
+    <TextView
+        android:id="@+id/noResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
