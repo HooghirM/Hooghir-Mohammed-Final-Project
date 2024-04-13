@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "730963147265",
+    "project_id": "hooghir-mohammed-final-project",
+    "storage_bucket": "hooghir-mohammed-final-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730963147265:android:2b2ae67e8ecab30ea6de00",
+        "android_client_info": {
+          "package_name": "com.example.hooghirmohammedfinalproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHSQuulu1BiYAwK_aKDQId6LCSDhtrRBk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

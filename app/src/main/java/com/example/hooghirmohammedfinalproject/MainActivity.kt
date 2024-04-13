@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.auth.AuthUI
 //import com.google.firebase.firestore.auth.User
 //import com.google.gson.annotations.SerializedName
 //import org.w3c.dom.Text
@@ -23,6 +24,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.google.firebase.firestore.FirebaseFirestore;
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,8 +41,44 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Get a Cloud Firestore instance
+        val db = FirebaseFirestore.getInstance()
+        val users = db.collection("users")
+
+        val newUser = hashMapOf(
+            "name" to "John"
+        )
+        users.document("User1").set(newUser)
+            .addOnSuccessListener {
+                Log.d("Firestore", "DocumentSnapshot successfully written!")
+            }
+            .addOnFailureListener { e ->
+                Log.w("Firestore", "Error writing document", e)
+            }
+
+        // Choose authentication providers -- make sure enable them on your firebase account first
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
+            //AuthUI.IdpConfig.PhoneBuilder().build(),
+            //AuthUI.IdpConfig.FacebookBuilder().build(),
+            //AuthUI.IdpConfig.TwitterBuilder().build()
+        )
+        // Create sign-in intent
+        val intent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .setTosAndPrivacyPolicyUrls("https://example.com", "https://example.com")
+//            .setLogo(R.drawable.ic_baseline_cake_24)
+            .setAlwaysShowSignInMethodScreen(true) // you may use this if you have only one provider
+            .setIsSmartLockEnabled(false)
+            .build()
+        // launch the sign-in intent above
+        startActivityForResult(intent, SIGN_IN_REQUEST_CODE)
+
         val userList = ArrayList<Event>()
-        val adapter = TicketResponse(userList)
+        val context = this
+        val adapter = TicketResponse(context, userList)
 
         editTextKeyword = findViewById(R.id.editTextKeyword)
         editTextCity = findViewById(R.id.editTextCity)

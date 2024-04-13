@@ -1,5 +1,6 @@
 package com.example.hooghirmohammedfinalproject
 
+import android.net.wifi.MloLink
 import com.google.gson.annotations.SerializedName
 
 data class TicketData(
@@ -15,7 +16,8 @@ data class Event(
     @SerializedName("images") val images: List<EventImage>,
     @SerializedName("dates") val dates: EventDate,
     @SerializedName("_embedded") val venuesEmbedded: VenuesEmbedded,
-    @SerializedName("priceRanges") val priceRanges: List<PriceRange>?
+    @SerializedName("priceRanges") val priceRanges: List<PriceRange>?,
+    @SerializedName ("url") val ticketLink: String
 ) {
 
     data class EventImage(
@@ -40,7 +42,6 @@ data class Event(
         @SerializedName("city") val city: VenueCity,
         @SerializedName("state") val state: VenueState,
         @SerializedName("address") val address: VenueAddress,
-        @SerializedName("url") val ticketLink: String
     )
 
     data class VenueCity(
