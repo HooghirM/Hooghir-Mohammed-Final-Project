@@ -1,5 +1,7 @@
 package com.example.hooghirmohammedfinalproject
 
+/* Took from FirebaseAuthenticationDemo */
+
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -75,7 +77,7 @@ class RegisterActivity : AppCompatActivity() {
                 // Choose authentication providers -- make sure enable them on your firebase account first
                 val providers = arrayListOf(
                     AuthUI.IdpConfig.EmailBuilder().build(),
-                    AuthUI.IdpConfig.GoogleBuilder().build()
+//                    AuthUI.IdpConfig.GoogleBuilder().build()
                     //AuthUI.IdpConfig.PhoneBuilder().build(),
                     //AuthUI.IdpConfig.FacebookBuilder().build(),
                     //AuthUI.IdpConfig.TwitterBuilder().build()
@@ -86,7 +88,6 @@ class RegisterActivity : AppCompatActivity() {
                     .createSignInIntentBuilder()
                     .setAvailableProviders(providers)
                     .setTosAndPrivacyPolicyUrls("https://example.com", "https://example.com")
-//                    .setLogo(R.drawable.baseline_cake_24)
                     .setAlwaysShowSignInMethodScreen(true) // use this if you have only one provider and really want the see the signin page
                     .setIsSmartLockEnabled(false)
                     .build()

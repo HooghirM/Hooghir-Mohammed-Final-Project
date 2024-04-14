@@ -7,13 +7,13 @@
     tools:context=".RegisterActivity">
 
 
-<!--    android:src="@drawable/baseline_cake_24"-->
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="156dp"
         android:layout_height="156dp"
         android:background="#4FC3F7"
-        android:padding="10dp"
+        android:src="@drawable/TicketMasterLogo"
         app:layout_constraintBottom_toTopOf="@+id/login_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -24,7 +24,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Example App"
+        android:text="Ticket Master"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"

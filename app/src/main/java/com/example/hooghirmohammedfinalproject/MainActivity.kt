@@ -1,7 +1,7 @@
 package com.example.hooghirmohammedfinalproject
 
-import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -15,16 +15,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.firebase.ui.auth.AuthUI
-//import com.google.firebase.firestore.auth.User
-//import com.google.gson.annotations.SerializedName
-//import org.w3c.dom.Text
-import retrofit2.Response
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import com.google.firebase.firestore.FirebaseFirestore;
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,42 +40,30 @@ class MainActivity : AppCompatActivity() {
 
         // Get a Cloud Firestore instance
         val db = FirebaseFirestore.getInstance()
+
         val users = db.collection("users")
 
-        val newUser = hashMapOf(
-            "name" to "John"
-        )
+        val newUser = hashMapOf("name" to "John")
         users.document("User1").set(newUser)
             .addOnSuccessListener {
-                Log.d("Firestore", "DocumentSnapshot successfully written!")
+                Log.d(TAG, "DocumentSnapshot successfully written!")
             }
             .addOnFailureListener { e ->
-                Log.w("Firestore", "Error writing document", e)
+                Log.w(TAG, "Error writing document", e)
             }
 
-        // Choose authentication providers -- make sure enable them on your firebase account first
-        val providers = arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build()
-            //AuthUI.IdpConfig.PhoneBuilder().build(),
-            //AuthUI.IdpConfig.FacebookBuilder().build(),
-            //AuthUI.IdpConfig.TwitterBuilder().build()
-        )
-        // Create sign-in intent
-        val intent = AuthUI.getInstance()
-            .createSignInIntentBuilder()
-            .setAvailableProviders(providers)
-            .setTosAndPrivacyPolicyUrls("https://example.com", "https://example.com")
-//            .setLogo(R.drawable.ic_baseline_cake_24)
-            .setAlwaysShowSignInMethodScreen(true) // you may use this if you have only one provider
-            .setIsSmartLockEnabled(false)
-            .build()
-        // launch the sign-in intent above
-        startActivityForResult(intent, SIGN_IN_REQUEST_CODE)
+        // Get instance of the FirebaseAuth
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        // If currentUser is null, open the RegisterActivity
+        if (currentUser == null) {
+            startRegisterActivity()
+        } else {
+            // Recreate MainActivity to refresh or reinitialize it
+            recreate()
+        }
 
         val userList = ArrayList<Event>()
-        val context = this
-        val adapter = TicketResponse(context, userList)
+        val adapter = TicketResponse(this, userList)
 
         editTextKeyword = findViewById(R.id.editTextKeyword)
         editTextCity = findViewById(R.id.editTextCity)
@@ -87,7 +72,6 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.visibility = View.GONE
-
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -97,14 +81,9 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val ticketMasterAPI = retrofit.create(TicketMasterApi::class.java)
-
         editTextCity.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                event?.action == KeyEvent.ACTION_DOWN &&
-                event.keyCode == KeyEvent.KEYCODE_ENTER
-            ) {
-                val inputMethodManager =
-                    getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || (event?.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER)) {
+                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(v.windowToken, 0)
                 searchButton.performClick()
                 true
@@ -113,70 +92,52 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Hiding keyboard when clicking search
-        fun View.hideKeyboard() {
-            val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as
-                    InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
-        }
-
         searchButton.setOnClickListener {
             val keyword = editTextKeyword.text.toString().trim()
             val city = editTextCity.text.toString().trim()
             noResults.text = ""
             it.hideKeyboard()
             when {
-                keyword.isEmpty() && city.isEmpty() -> showAlert(
-                    "Search term and city missing",
-                    "Search term and city cannot be empty. Please enter both."
-                )
-
-                keyword.isEmpty() -> showAlert(
-                    "Search term missing",
-                    "Search term cannot be empty. Please enter a search term."
-                )
-
-                city.isEmpty() -> showAlert(
-                    "Location missing",
-                    "City cannot be empty. Please enter a city."
-                )
-
+                keyword.isEmpty() && city.isEmpty() -> showAlert("Search term and city missing", "Search term and city cannot be empty. Please enter both.")
+                keyword.isEmpty() -> showAlert("Search term missing", "Search term cannot be empty. Please enter a search term.")
+                city.isEmpty() -> showAlert("Location missing", "City cannot be empty. Please enter a city.")
                 else -> {
                     userList.clear()
-                    ticketMasterAPI.searchEvents(API_KEY, keyword, city, ("date,asc"))
-                        .enqueue(object : Callback<TicketData> {
-                            override fun onResponse(
-                                call: Call<TicketData>,
-                                response: Response<TicketData>
-                            ) {
-                                if (response.isSuccessful && response.body() != null) {
-                                    val responseBody = response.body()!!
-                                    if (responseBody.embedded?.events.isNullOrEmpty()) {
-                                        noResults.text = "No results found."
-                                        noResults.visibility = View.VISIBLE
-                                        recyclerView.visibility = View.INVISIBLE
-                                    } else {
-                                        val events = responseBody.embedded.events
-                                        userList.addAll(events)
-                                        adapter.notifyDataSetChanged()
-                                        recyclerView.visibility = View.VISIBLE
-                                        noResults.visibility = View.GONE
-                                    }
-                                } else {
+                    ticketMasterAPI.searchEvents(API_KEY, keyword, city, "date,asc").enqueue(object : Callback<TicketData> {
+                        override fun onResponse(call: Call<TicketData>, response: Response<TicketData>) {
+                            if (response.isSuccessful && response.body() != null) {
+                                val responseBody = response.body()!!
+                                if (responseBody.embedded?.events.isNullOrEmpty()) {
+                                    noResults.text = "No results found."
                                     noResults.visibility = View.VISIBLE
-                                    recyclerView.visibility = View.GONE
+                                    recyclerView.visibility = View.INVISIBLE
+                                } else {
+                                    userList.addAll(responseBody.embedded!!.events)
+                                    adapter.notifyDataSetChanged()
+                                    recyclerView.visibility = View.VISIBLE
+                                    noResults.visibility = View.GONE
                                 }
-                            }
-
-                            override fun onFailure(call: Call<TicketData>, t: Throwable) {
-                                Log.e(TAG, "API call failed", t)
+                            } else {
                                 noResults.visibility = View.VISIBLE
                                 recyclerView.visibility = View.GONE
                             }
-                        })
+                        }
+
+                        override fun onFailure(call: Call<TicketData>, t: Throwable) {
+                            Log.e(TAG, "API call failed", t)
+                            noResults.visibility = View.VISIBLE
+                            recyclerView.visibility = View.GONE
+                        }
+                    })
                 }
             }
         }
+    }
+
+    private fun startRegisterActivity() {
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun showAlert(title: String, message: String) {
@@ -186,5 +147,10 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton("OKAY") { dialog, _ -> dialog.dismiss() }
             .create()
             .show()
+    }
+
+    private fun View.hideKeyboard() {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
 }
