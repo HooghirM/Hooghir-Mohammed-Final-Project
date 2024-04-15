@@ -13,7 +13,7 @@
         android:layout_width="156dp"
         android:layout_height="156dp"
         android:background="#4FC3F7"
-        android:src="@drawable/TicketMasterLogo"
+        android:src="@drawable/ticketmaster"
         app:layout_constraintBottom_toTopOf="@+id/login_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

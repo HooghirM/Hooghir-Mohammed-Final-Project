@@ -58,9 +58,10 @@ class MainActivity : AppCompatActivity() {
         if (currentUser == null) {
             startRegisterActivity()
         } else {
-            // Recreate MainActivity to refresh or reinitialize it
-            recreate()
+            // Updates UI components in main activity
+            reloadUI()
         }
+
 
         val userList = ArrayList<Event>()
         val adapter = TicketResponse(this, userList)
@@ -148,6 +149,18 @@ class MainActivity : AppCompatActivity() {
             .create()
             .show()
     }
+
+    // Function for updating UI components after user logs in or registers
+    private fun reloadUI() {
+        
+
+//        val currentUser = FirebaseAuth.getInstance().currentUser
+//
+//        noResults.visibility = View.GONE
+//        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
+//        recyclerView.visibility = View.GONE
+    }
+
 
     private fun View.hideKeyboard() {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
