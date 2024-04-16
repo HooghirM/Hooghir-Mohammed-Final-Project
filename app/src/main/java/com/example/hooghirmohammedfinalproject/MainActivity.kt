@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Log.d(TAG, "onCreate: MainActivity")
 
         // Get a Cloud Firestore instance
         val db = FirebaseFirestore.getInstance()
@@ -97,11 +98,13 @@ class MainActivity : AppCompatActivity() {
 
         // When logout button clicked, sends user back to RegisterActivity
         logoutButton.setOnClickListener {
-
+            Log.d(TAG, "Logout button clicked")
             val intent = Intent(this@MainActivity, RegisterActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK // Clears all the activities on top of RegisterActivity & makes RegisterActivity restart
             startActivity(intent)
+            Log.d(TAG, "RegisterActivity intent fired")
             finish()
+            Log.d(TAG, "MainActivity finished")
 
         }
 
