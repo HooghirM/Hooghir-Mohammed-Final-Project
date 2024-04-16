@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var editTextCity: EditText
     private lateinit var searchButton: Button
     private lateinit var noResults: TextView
+    private lateinit var logoutButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         editTextCity = findViewById(R.id.editTextCity)
         searchButton = findViewById(R.id.searchButton)
         noResults = findViewById<TextView>(R.id.noResults)
+        logoutButton = findViewById<Button>(R.id.logoutButton)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.visibility = View.GONE
@@ -91,6 +93,16 @@ class MainActivity : AppCompatActivity() {
             } else {
                 false
             }
+        }
+
+        // When logout button clicked, sends user back to RegisterActivity
+        logoutButton.setOnClickListener {
+
+            val intent = Intent(this@MainActivity, RegisterActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK // Clears all the activities on top of RegisterActivity & makes RegisterActivity restart
+            startActivity(intent)
+            finish()
+
         }
 
         searchButton.setOnClickListener {

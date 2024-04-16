@@ -27,8 +27,8 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="32dp"
         android:ems="10"
-        android:inputType="text"
         android:hint="Event Type or keyword to search"
+        android:inputType="text"
         android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -82,5 +82,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextCity" />
+
+    <!-- logout button -->
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="82dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/square_button"
+        android:backgroundTint="#ED2F2F"
+        android:padding="2dp"
+        android:text="Logout"
+        android:textSize="8dp"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
