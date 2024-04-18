@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import retrofit2.Call
@@ -64,7 +65,6 @@ class MainActivity : AppCompatActivity() {
             reloadUI()
         }
 
-
         val userList = ArrayList<Event>()
         val adapter = TicketResponse(this, userList)
 
@@ -87,7 +87,8 @@ class MainActivity : AppCompatActivity() {
         val ticketMasterAPI = retrofit.create(TicketMasterApi::class.java)
         editTextCity.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || (event?.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER)) {
-                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                val inputMethodManager =
+                    getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(v.windowToken, 0)
                 searchButton.performClick()
                 true
@@ -98,15 +99,27 @@ class MainActivity : AppCompatActivity() {
 
         // When logout button clicked, sends user back to RegisterActivity
         logoutButton.setOnClickListener {
-            Log.d(TAG, "Logout button clicked")
-            val intent = Intent(this@MainActivity, RegisterActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK // Clears all the activities on top of RegisterActivity & makes RegisterActivity restart
-            startActivity(intent)
-            Log.d(TAG, "RegisterActivity intent fired")
-            finish()
-            Log.d(TAG, "MainActivity finished")
 
+            AuthUI.getInstance().signOut(this)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        startRegisterActivity()
+                    } else {
+                        Log.e(TAG, "Task is not successful:${task.exception}")
+                    }
+                }
         }
+
+
+//            Log.d(TAG, "Logout button clicked")
+//            val intent = Intent(this@MainActivity, RegisterActivity::class.java)
+//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK // Clears all the activities on top of RegisterActivity & makes RegisterActivity restart
+//            startActivity(intent)
+//            Log.d(TAG, "RegisterActivity intent fired")
+//            finish()
+//            Log.d(TAG, "MainActivity finished")
+//    }
+//
 
         searchButton.setOnClickListener {
             val keyword = editTextKeyword.text.toString().trim()
@@ -167,7 +180,31 @@ class MainActivity : AppCompatActivity() {
 
     // Function for updating UI components after user logs in or registers
     private fun reloadUI() {
-        
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            // Show or update elements that should be visible only when the user is logged in
+//            findViewById<TextView>(R.id.loggedInUser).text = "Logged in as: ${currentUser.displayName}"
+            findViewById<Button>(R.id.logoutButton).visibility = View.VISIBLE
+
+            // Load or refresh the data that the user should see
+            refreshUserData()
+        } else {
+            // Hide or reset elements that should not be visible when no user is logged in
+//            findViewById<TextView>(R.id.loggedInUser).text = "Not logged in"
+            findViewById<Button>(R.id.logoutButton).visibility = View.GONE
+
+
+        }
+
+
+
+    }
+
+    private fun refreshUserData() {
+        // Logic to fetch and display data relevant to the user
+
+
+
 
 //        val currentUser = FirebaseAuth.getInstance().currentUser
 //
