@@ -16,6 +16,9 @@
         android:theme="@style/Theme.HooghirMohammedFinalProject"
         tools:targetApi="31">
         <activity
+            android:name=".geminiActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity

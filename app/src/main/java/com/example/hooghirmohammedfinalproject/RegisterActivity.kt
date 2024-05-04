@@ -11,7 +11,9 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.BuildConfig
 import com.firebase.ui.auth.IdpResponse
+import com.google.ai.client.generativeai.GenerativeModel
 import com.google.firebase.auth.FirebaseAuth
 
 class RegisterActivity : AppCompatActivity() {
@@ -25,6 +27,7 @@ class RegisterActivity : AppCompatActivity() {
 
         // Get instance of the FirebaseAuth
         val currentUser = FirebaseAuth.getInstance().currentUser
+
 
         // If currentUser is not null, we have a user and go back to the MainActivity
         if (currentUser != null) {

@@ -18,8 +18,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="401dp"
+            android:layout_height="280dp">
 
             <ImageView
                 android:id="@+id/imageViewTicket"
@@ -65,8 +65,8 @@
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="8dp"
                 android:text="Address"
-                android:textStyle="italic"
                 android:textSize="12dp"
+                android:textStyle="italic"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewVenue" />
 
@@ -98,7 +98,7 @@
                 android:id="@+id/buttonVenueLink"
                 android:layout_width="83dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="68dp"
+                android:layout_marginTop="116dp"
                 android:layout_marginEnd="28dp"
                 android:backgroundTint="#2c97e8"
                 android:paddingLeft="8dp"
@@ -107,6 +107,15 @@
                 android:textSize="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageViewTicket" />
+
+            <Button
+                android:id="@+id/geminiButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:text="?"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewPriceRange" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

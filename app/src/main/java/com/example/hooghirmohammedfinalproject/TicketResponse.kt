@@ -29,6 +29,7 @@ class TicketResponse(private val context: Context, private val events: ArrayList
         val ticketDate: TextView = itemView.findViewById(R.id.textViewDate)
         val priceRange: TextView = itemView.findViewById(R.id.textViewPriceRange)
         val ticketButton: Button = itemView.findViewById(R.id.buttonVenueLink)
+        val geminiButton: Button = itemView.findViewById(R.id.geminiButton)
 
         // See ticket button link
         init {
@@ -40,6 +41,10 @@ class TicketResponse(private val context: Context, private val events: ArrayList
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                     context.startActivity(intent)
                 }
+            }
+            geminiButton.setOnClickListener {
+
+
             }
         }
     }
