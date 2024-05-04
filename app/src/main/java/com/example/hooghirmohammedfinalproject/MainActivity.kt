@@ -177,6 +177,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    
     private fun startRegisterActivity() {
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
@@ -206,11 +207,13 @@ class MainActivity : AppCompatActivity() {
             // Hide or reset elements that should not be visible when no user is logged in
 //            findViewById<TextView>(R.id.loggedInUser).text = "Not logged in"
             findViewById<Button>(R.id.logoutButton).visibility = View.GONE
+
+
         }
     }
 
     private fun refreshUserData() {
-        // Implement refreshing user data here
+
     }
 
     private fun View.hideKeyboard() {

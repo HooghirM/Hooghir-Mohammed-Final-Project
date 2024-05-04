@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -51,7 +52,7 @@ class geminiActivity : AppCompatActivity() {
 
             // This is probably not the best approach as it uses Main thread
             CoroutineScope(Dispatchers.Main + CoroutineName("MyScope")).launch {
-                val promptWidget = findViewById<EditText>(R.id.prompt)
+                val promptWidget = findViewById<TextView>(R.id.geminiResponse)
                 if (promptWidget.text.isEmpty()) {
                     return@launch
                 }

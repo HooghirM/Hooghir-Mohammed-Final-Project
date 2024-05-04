@@ -43,8 +43,9 @@ class TicketResponse(private val context: Context, private val events: ArrayList
                 }
             }
             geminiButton.setOnClickListener {
-
-
+                val context = it.context
+                val intent = Intent(context, geminiActivity::class.java)
+                context.startActivity(intent)
             }
         }
     }
